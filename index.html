@@ -60,6 +60,48 @@
       to { transform: translate3d(-44px, 44px, 0); }
     }
 
+    .touch-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .touch-spark {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--brand);
+      box-shadow: 0 0 18px rgba(15, 142, 168, 0.48);
+      animation: touchSpark 720ms ease-out forwards;
+    }
+
+    .touch-ring {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(15, 142, 168, 0.28);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0.35);
+      animation: touchRing 680ms ease-out forwards;
+    }
+
+    @keyframes touchSpark {
+      to {
+        opacity: 0;
+        transform: translate(var(--spark-x), var(--spark-y)) scale(0.2);
+      }
+    }
+
+    @keyframes touchRing {
+      to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(5.2);
+      }
+    }
+
     .wrap {
       width: min(1080px, calc(100% - 32px));
       margin: 0 auto;
@@ -653,6 +695,7 @@
   </style>
 </head>
 <body>
+  <div class="touch-layer" id="touchLayer" aria-hidden="true"></div>
   <header class="topbar">
     <div class="wrap topbar-inner">
       <a class="brand" href="#home" aria-label="Yonal Studio home">
@@ -1072,6 +1115,36 @@ For privacy questions or data requests, contact yonalsolutions@gmail.com or http
         render(FALLBACK_EXTENSIONS, 'fallback');
       }
     }
+
+    function playTouchAnimation(event) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const layer = document.getElementById('touchLayer');
+      if (!layer) return;
+
+      const colors = ['#0f8ea8', '#f2a541', '#138a5b', '#0d6378'];
+      const ring = document.createElement('span');
+      ring.className = 'touch-ring';
+      ring.style.left = `${event.clientX}px`;
+      ring.style.top = `${event.clientY}px`;
+      layer.appendChild(ring);
+      setTimeout(() => ring.remove(), 720);
+
+      for (let i = 0; i < 12; i += 1) {
+        const spark = document.createElement('span');
+        const angle = (Math.PI * 2 * i) / 12;
+        const distance = 28 + Math.random() * 38;
+        spark.className = 'touch-spark';
+        spark.style.left = `${event.clientX}px`;
+        spark.style.top = `${event.clientY}px`;
+        spark.style.background = colors[i % colors.length];
+        spark.style.setProperty('--spark-x', `${Math.cos(angle) * distance}px`);
+        spark.style.setProperty('--spark-y', `${Math.sin(angle) * distance}px`);
+        layer.appendChild(spark);
+        setTimeout(() => spark.remove(), 760);
+      }
+    }
+
+    document.addEventListener('pointerdown', playTouchAnimation, { passive: true });
 
     loadSheet();
   </script>
