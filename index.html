@@ -159,12 +159,6 @@
       background: var(--brand-dark);
     }
 
-    .btn.copied {
-      color: #fff;
-      border-color: var(--ok);
-      background: var(--ok);
-    }
-
     .hero {
       position: relative;
       display: grid;
@@ -541,10 +535,6 @@
     }
 
     .policy-link-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: center;
       padding: 12px;
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -647,9 +637,6 @@
       .policy,
       .contact-card,
       .hero-card { padding: 16px; }
-      .policy-link-row {
-        grid-template-columns: 1fr;
-      }
       footer { flex-direction: column; }
     }
 
@@ -1012,16 +999,11 @@ For privacy questions or data requests, contact yonalsolutions@gmail.com or http
       links.textContent = '';
       items.forEach((record) => {
         const row = document.createElement('div');
-        const copy = document.createElement('button');
         const link = document.createElement('a');
         row.className = 'policy-link-row';
-        copy.className = 'btn';
-        copy.type = 'button';
         link.href = currentPrivacyUrl(record);
-        link.textContent = `${text(record.name, record.id)} privacy URL`;
-        copy.textContent = 'Copy';
-        copy.dataset.copyUrl = link.href;
-        row.append(link, copy);
+        link.textContent = `${text(record.name, record.id)} Privacy Policy`;
+        row.append(link);
         links.appendChild(row);
       });
     }
@@ -1090,22 +1072,6 @@ For privacy questions or data requests, contact yonalsolutions@gmail.com or http
         render(FALLBACK_EXTENSIONS, 'fallback');
       }
     }
-
-    document.addEventListener('click', async (event) => {
-      const button = event.target.closest('[data-copy-url]');
-      if (!button) return;
-      try {
-        await navigator.clipboard.writeText(button.dataset.copyUrl);
-        button.textContent = 'Copied';
-        button.classList.add('copied');
-        setTimeout(() => {
-          button.textContent = 'Copy';
-          button.classList.remove('copied');
-        }, 1400);
-      } catch {
-        window.prompt('Copy privacy URL', button.dataset.copyUrl);
-      }
-    });
 
     loadSheet();
   </script>
