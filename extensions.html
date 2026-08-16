@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Extensions | Yonal Studio</title>
+  <meta name="description" content="Yonal Studio Chrome extensions.">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="touch-layer" id="touchLayer" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="index.html" aria-label="Yonal Studio home">
+        <img src="Yonal.png" alt="Yonal Studio logo">
+        <span><strong>Yonal Studio</strong><span>Chrome extension studio</span></span>
+      </a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="extensions.html">Extensions</a>
+        <a href="privacy.html?privacy=typlune">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="page-head">
+      <p class="eyebrow">Products</p>
+      <h1>Extensions</h1>
+      <p class="lead">Official Chrome extensions by Yonal Studio.</p>
+    </section>
+    <section class="page-section">
+      <div class="grid" id="extensionGrid"></div>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <span>Copyright © <span data-year></span> Yonal Studio.</span>
+    <span>All rights reserved.</span>
+  </footer>
+
+  <script src="assets/site.js"></script>
+  <script>
+    loadExtensions().then((items) => {
+      const grid = document.getElementById('extensionGrid');
+      grid.textContent = '';
+      items.forEach((item) => grid.appendChild(createExtensionCard(item)));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy Policy | Yonal Studio</title>
+  <meta name="description" content="Yonal Studio Chrome extension privacy policy.">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="touch-layer" id="touchLayer" aria-hidden="true"></div>
+  <main class="policy-shell">
+    <header class="policy-top">
+      <img class="policy-logo logo-tile" id="policyLogo" src="Yonal.png" alt="Extension logo">
+      <div>
+        <p class="eyebrow">Privacy Policy</p>
+        <h1 id="policyTitle">Privacy Policy</h1>
+        <p class="muted" id="policyDate">Effective date</p>
+      </div>
+    </header>
+    <article class="policy-card">
+      <pre id="policyBody"></pre>
+    </article>
+  </main>
+
+  <script src="assets/site.js"></script>
+  <script>
+    loadExtensions().then((items) => {
+      const item = selectedExtension(items);
+      const logo = document.getElementById('policyLogo');
+      logo.src = logoFor(item);
+      logo.alt = `${text(item.name, 'Extension')} logo`;
+      logo.onerror = () => handleImageError(logo);
+      document.title = `${text(item.name, 'Extension')} Privacy Policy | Yonal Studio`;
+      document.getElementById('policyTitle').textContent = `${text(item.name, 'Extension')} Privacy Policy`;
+      document.getElementById('policyDate').textContent = `Effective date: ${text(item.privacyEffectiveDate, '2026-08-16')}`;
+      document.getElementById('policyBody').textContent = displayPolicy(item);
+    });
+  </script>
+</body>
+</html>
