@@ -108,9 +108,8 @@ a { color: inherit; }
 
 .brand img,
 .logo-tile {
-  border: 1px solid rgba(217, 229, 234, 0.92);
-  background: rgba(255, 255, 255, 0.8);
   object-fit: contain;
+  filter: drop-shadow(0 12px 20px rgba(15, 142, 168, 0.18));
 }
 
 .brand img {
@@ -275,6 +274,19 @@ h3 {
   min-height: 430px;
 }
 
+.logo-showcase::before {
+  content: "";
+  position: absolute;
+  width: min(310px, 70vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.78) 0 34%, rgba(15, 142, 168, 0.12) 35% 52%, transparent 70%),
+    conic-gradient(from 140deg, rgba(15, 142, 168, 0.18), rgba(242, 165, 65, 0.18), rgba(19, 138, 91, 0.12), rgba(15, 142, 168, 0.18));
+  filter: blur(0.2px);
+  animation: logoGlow 7s ease-in-out infinite;
+}
+
 .logo-orbit {
   position: absolute;
   width: min(360px, 80vw);
@@ -303,12 +315,11 @@ h3 {
 }
 
 .main-logo {
-  width: min(210px, 50vw);
+  position: relative;
+  width: min(260px, 58vw);
   aspect-ratio: 1;
-  border-radius: 34px;
-  padding: 18px;
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: var(--shadow);
+  padding: 8px;
+  filter: drop-shadow(0 26px 42px rgba(15, 142, 168, 0.28));
   animation: floatLogo 4.8s ease-in-out infinite;
 }
 
@@ -462,6 +473,13 @@ ul.clean-list {
 
 @keyframes floatLogo {
   50% { transform: translateY(-10px) scale(1.025); }
+}
+
+@keyframes logoGlow {
+  50% {
+    transform: scale(1.04);
+    opacity: 0.76;
+  }
 }
 
 @keyframes touchSpark {
