@@ -1,0 +1,14 @@
+id,name,tagline,summary,description,version,status,storeUrl,iconUrl,features,privacyEffectiveDate,privacyPolicy,published
+typlune,Typlune,Smart typing tools for the browser,"Typlune helps you write cleaner browser text faster with quick formatting and productivity shortcuts.","Typlune is a lightweight Chrome extension from Yonal Studio for people who write often in the browser. It focuses on speed, clean text workflows, and simple controls without third-party analytics or unnecessary account requirements.",1.0.0,Coming soon,https://chromewebstore.google.com/,,"Quick text cleanup|Writing workflow shortcuts|Lightweight browser UI|No third-party analytics",2026-08-15,"Typlune Privacy Policy
+
+Effective date: 2026-08-15
+
+Typlune is designed to keep the user experience simple and privacy-aware.
+
+Data collection: Typlune does not sell personal data and does not use third-party analytics. The extension only uses permissions required for its stated browser features.
+
+Local processing: Where possible, extension actions are handled locally in the browser.
+
+Support contact: For privacy questions, contact yonalsolutions@gmail.com or Telegram https://t.me/websipX.
+
+Changes: If this policy changes, the effective date will be updated on this page.",true

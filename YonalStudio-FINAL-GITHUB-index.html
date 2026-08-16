@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yonal Studio | Chrome Extensions</title>
+  <meta name="description" content="Yonal Studio Chrome extensions, support, and dynamic privacy policies.">
+  <style>
+    :root {
+      --ink: #101828;
+      --muted: #667085;
+      --line: rgba(16, 24, 40, 0.12);
+      --panel: rgba(255, 255, 255, 0.8);
+      --brand: #06b6d4;
+      --brand-2: #2563eb;
+      --accent: #f97316;
+      --rose: #f43f5e;
+      --green: #10b981;
+      --shadow: 0 24px 80px rgba(16, 24, 40, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 16% 10%, rgba(6, 182, 212, 0.2), transparent 28%),
+        radial-gradient(circle at 84% 14%, rgba(249, 115, 22, 0.14), transparent 28%),
+        radial-gradient(circle at 52% 90%, rgba(37, 99, 235, 0.13), transparent 32%),
+        linear-gradient(135deg, #f8fdff 0%, #fffaf3 48%, #f3fbff 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(6, 182, 212, 0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(6, 182, 212, 0.09) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.65), transparent 72%);
+      animation: gridDrift 26s linear infinite;
+    }
+
+    @keyframes gridDrift { to { transform: translate3d(-52px, 52px, 0); } }
+
+    a { color: inherit; text-decoration: none; }
+
+    .touch-burst {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .spark {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--brand);
+      box-shadow: 0 0 24px rgba(6, 182, 212, 0.7);
+      animation: spark 720ms ease-out forwards;
+    }
+
+    @keyframes spark {
+      to {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(0.2);
+      }
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 14px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 14px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 16px 48px rgba(16, 24, 40, 0.1);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #020617;
+      box-shadow: 0 18px 42px rgba(6, 182, 212, 0.24);
+      flex: 0 0 auto;
+    }
+
+    .brand-mark::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(from 140deg, transparent, rgba(6,182,212,.95), rgba(37,99,235,.9), transparent);
+      animation: logoSpin 5s linear infinite;
+    }
+
+    .brand-mark img {
+      position: relative;
+      z-index: 1;
+      width: 150%;
+      height: 150%;
+      object-fit: contain;
+    }
+
+    @keyframes logoSpin { to { transform: rotate(360deg); } }
+
+    .brand strong, .brand small { display: block; }
+    .brand small { color: var(--muted); font-size: .78rem; }
+
+    .nav {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .nav a,
+    .button {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 15px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      font-weight: 850;
+      background: transparent;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .nav a:hover,
+    .button:hover {
+      transform: translateY(-2px);
+      border-color: rgba(6, 182, 212, 0.24);
+      background: rgba(6, 182, 212, 0.08);
+    }
+
+    .button.primary {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--brand-2), var(--brand));
+      box-shadow: 0 16px 38px rgba(37, 99, 235, 0.24);
+    }
+
+    .button.soft {
+      border-color: var(--line);
+      background: rgba(255,255,255,.78);
+    }
+
+    section { padding: 88px 0; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(360px, 1.08fr);
+      align-items: center;
+      gap: 42px;
+      min-height: calc(100vh - 88px);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      margin: 0 0 14px;
+      padding: 8px 12px;
+      border: 1px solid rgba(6, 182, 212, 0.18);
+      border-radius: 999px;
+      color: #075985;
+      background: rgba(255, 255, 255, 0.72);
+      font-size: .82rem;
+      font-weight: 900;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: clamp(3.6rem, 11vw, 8.2rem);
+      line-height: .86;
+      letter-spacing: 0;
+      color: #0f172a;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: clamp(2.15rem, 5vw, 4.4rem);
+      line-height: .96;
+      letter-spacing: 0;
+    }
+
+    h3 { margin-bottom: 10px; font-size: 1.3rem; }
+
+    .lead,
+    .muted,
+    .card p,
+    .policy p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .lead {
+      max-width: 690px;
+      font-size: clamp(1.08rem, 2vw, 1.32rem);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 590px;
+    }
+
+    .logo-stage {
+      position: absolute;
+      inset: 0 0 auto;
+      display: grid;
+      place-items: center;
+      height: 430px;
+    }
+
+    .hero-logo {
+      width: min(410px, 78vw);
+      filter: drop-shadow(0 24px 42px rgba(6, 182, 212, 0.28));
+      animation: floatLogo 5s ease-in-out infinite;
+    }
+
+    .orbit {
+      position: absolute;
+      width: 430px;
+      height: 430px;
+      border: 1px solid rgba(6, 182, 212, .26);
+      border-radius: 50%;
+      animation: orbit 14s linear infinite;
+    }
+
+    .orbit::before {
+      content: "✨";
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      font-size: 1.4rem;
+      filter: drop-shadow(0 0 14px rgba(249, 115, 22, .6));
+    }
+
+    .orbit.two {
+      width: 320px;
+      height: 320px;
+      animation-duration: 9s;
+      animation-direction: reverse;
+    }
+
+    @keyframes floatLogo { 50% { transform: translateY(-18px) scale(1.025); } }
+    @keyframes orbit { to { transform: rotate(360deg); } }
+
+    .preview {
+      position: absolute;
+      right: 0;
+      bottom: 12px;
+      left: 78px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(255,255,255,.84);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .preview-bar {
+      display: flex;
+      gap: 8px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .preview-bar span {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--rose);
+    }
+
+    .preview-bar span:nth-child(2) { background: var(--accent); }
+    .preview-bar span:nth-child(3) { background: var(--green); }
+
+    .preview-body { padding: 24px; }
+
+    .typing-lines {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .typing-lines span,
+    .shot-lines span {
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(6,182,212,.2), rgba(37,99,235,.28), rgba(249,115,22,.18));
+      animation: linePulse 2.8s ease-in-out infinite;
+    }
+
+    .typing-lines span:nth-child(2),
+    .shot-lines span:nth-child(2) { width: 78%; animation-delay: -.6s; }
+    .typing-lines span:nth-child(3),
+    .shot-lines span:nth-child(3) { width: 54%; animation-delay: -1.1s; }
+
+    @keyframes linePulse { 50% { opacity: .48; transform: scaleX(.96); } }
+
+    .section-head {
+      max-width: 780px;
+      margin-bottom: 28px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card,
+    .policy,
+    .contact {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      box-shadow: 0 16px 48px rgba(16,24,40,.1);
+      backdrop-filter: blur(16px);
+    }
+
+    .card,
+    .policy { padding: 24px; }
+
+    .card,
+    .contact {
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .card:hover,
+    .contact:hover {
+      transform: translateY(-6px);
+      border-color: rgba(6, 182, 212, 0.32);
+      box-shadow: 0 26px 68px rgba(16,24,40,.16);
+    }
+
+    .shot {
+      display: grid;
+      grid-template-columns: 88px minmax(0,1fr);
+      align-items: center;
+      gap: 16px;
+      min-height: 138px;
+      margin-bottom: 20px;
+      padding: 14px;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 16% 20%, rgba(6,182,212,.22), transparent 32%),
+        linear-gradient(135deg, rgba(255,255,255,.76), rgba(240,249,255,.86));
+    }
+
+    .extension-logo {
+      width: 88px;
+      height: 88px;
+      border-radius: 20px;
+      object-fit: cover;
+      background: #020617;
+      box-shadow: 0 14px 32px rgba(37,99,235,.18);
+    }
+
+    .shot-lines { display: grid; gap: 10px; margin: 0; }
+
+    ul {
+      display: grid;
+      gap: 9px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li { color: var(--muted); line-height: 1.55; }
+    li::before { content: "✅"; margin-right: 8px; }
+
+    .links,
+    .policy-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .links a,
+    .policy-list a {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.66);
+      transition: transform 160ms ease, border-color 160ms ease;
+    }
+
+    .links a:hover,
+    .policy-list a:hover {
+      transform: translateX(4px);
+      border-color: rgba(6,182,212,.34);
+    }
+
+    .policy { max-width: 940px; }
+    .policy a { color: #0369a1; font-weight: 850; }
+    .policy-box { white-space: pre-wrap; color: var(--muted); line-height: 1.75; }
+
+    .contacts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .contact {
+      display: grid;
+      gap: 10px;
+      padding: 22px;
+    }
+
+    .contact b {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      color: white;
+      background: linear-gradient(135deg, var(--brand-2), var(--brand));
+      font-size: 1.2rem;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 28px 0 42px;
+      color: var(--muted);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 620ms ease, transform 620ms ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .ripple {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      pointer-events: none;
+      background: rgba(6, 182, 212, 0.28);
+      transform: translate(-50%, -50%) scale(0);
+      animation: ripple 620ms ease-out forwards;
+    }
+
+    @keyframes ripple {
+      to { opacity: 0; transform: translate(-50%, -50%) scale(18); }
+    }
+
+    @media (max-width: 880px) {
+      .shell { width: min(100% - 22px, 720px); }
+      .topbar { position: relative; top: 0; align-items: stretch; flex-direction: column; }
+      .nav { display: grid; grid-template-columns: repeat(3, 1fr); }
+      .nav a { min-width: 0; padding-inline: 8px; font-size: .9rem; }
+      .hero, .grid, .contacts { grid-template-columns: 1fr; }
+      .hero { min-height: auto; padding-top: 50px; }
+      .hero-visual { min-height: 520px; }
+      .preview { left: 0; }
+      .orbit { width: 330px; height: 330px; }
+      .orbit.two { width: 250px; height: 250px; }
+      section { padding: 66px 0; }
+    }
+
+    @media (max-width: 560px) {
+      h1 { font-size: clamp(3.4rem, 19vw, 5rem); }
+      .shot { grid-template-columns: 1fr; }
+      footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="touch-burst" id="touchBurst" aria-hidden="true"></div>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="Yonal Studio home">
+        <span class="brand-mark"><img id="navLogo" alt="Yonal logo"></span>
+        <span><strong>Yonal Studio</strong><small>Chrome extensions ✨</small></span>
+      </a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#extensions">Extensions</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="reveal">
+          <p class="badge">🚀 Google Sheet CMS</p>
+          <h1>Yonal Studio</h1>
+          <p class="lead">Beautiful Chrome extension pages, dynamic extension logos, and one privacy policy system for every extension you add later.</p>
+          <div class="actions">
+            <a class="button primary" href="#extensions">Explore Extensions</a>
+            <a class="button soft" href="https://t.me/websipX" target="_blank" rel="noopener">💬 Telegram</a>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal" aria-label="Animated Yonal logo">
+          <div class="logo-stage">
+            <span class="orbit"></span>
+            <span class="orbit two"></span>
+            <img id="heroLogo" class="hero-logo" alt="Yonal logo">
+          </div>
+          <div class="preview">
+            <div class="preview-bar"><span></span><span></span><span></span></div>
+            <div class="preview-body">
+              <p class="badge">⭐ Featured extension</p>
+              <h2 id="featuredName">Typlune</h2>
+              <p id="featuredSummary" class="muted">Smart typing tools for the browser.</p>
+              <div class="typing-lines"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="extensions" class="reveal">
+        <div class="section-head">
+          <p class="badge">🧩 Extensions</p>
+          <h2>All Products</h2>
+          <p class="muted">Add more rows to the Google Sheet. Published extensions appear here automatically with logos, install links, features, and privacy links.</p>
+        </div>
+        <div class="grid" id="extensionGrid">
+          <article class="card">
+            <p class="badge">🔗 Official Links</p>
+            <h3>Yonal Studio Hub</h3>
+            <p>Use this website for Chrome Web Store support, public privacy URLs, and official creator links.</p>
+            <div class="links">
+              <a href="https://t.me/websipX" target="_blank" rel="noopener">💬 Telegram Support</a>
+              <a href="mailto:yonalsolutions@gmail.com">📧 yonalsolutions@gmail.com</a>
+              <a href="https://buymeacoffee.com/maducreator" target="_blank" rel="noopener">☕ Buy Me a Coffee</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="privacy" class="reveal">
+        <article class="policy">
+          <p class="badge" id="policyName">🔐 Yonal Studio</p>
+          <h2 id="policyTitle">Privacy Policy</h2>
+          <p id="policyDate" class="muted">Choose an extension privacy URL.</p>
+          <div class="policy-box" id="policyBody">Privacy URL format: https://daxapro.github.io/YonalStudio/?privacy=typlune</div>
+          <div class="policy-list" id="policyList"></div>
+          <div class="actions">
+            <a class="button primary" href="#extensions">All Extensions</a>
+            <a class="button soft" href="mailto:yonalsolutions@gmail.com">📧 Email Support</a>
+          </div>
+        </article>
+      </section>
+
+      <section id="contact" class="reveal">
+        <div class="section-head">
+          <p class="badge">🤝 Contact</p>
+          <h2>Support Yonal Studio</h2>
+          <p class="muted">Official links for help, feedback, privacy questions, and creator support.</p>
+        </div>
+        <div class="contacts">
+          <a class="contact" href="https://t.me/websipX" target="_blank" rel="noopener"><b>💬</b><h3>Telegram</h3><p>Fast extension support and updates.</p></a>
+          <a class="contact" href="mailto:yonalsolutions@gmail.com"><b>📧</b><h3>Email</h3><p>Detailed reports and privacy questions.</p></a>
+          <a class="contact" href="https://buymeacoffee.com/maducreator" target="_blank" rel="noopener"><b>☕</b><h3>Buy Me a Coffee</h3><p>Support future browser tools.</p></a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Yonal Studio</span>
+      <span>Dynamic privacy pages for Chrome extensions ✨</span>
+    </footer>
+  </div>
+
+  <script>
+    const LOGO = 'data:image/webp;base64,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';
+    const SHEET_ID = '1vEPSHcj1e2K2cfmdds1sfIabSyVgwd33LdMlN4g7PhA';
+    const SHEET_NAME = 'Extensions';
+
+    const fallbackExtensions = [{
+      id: 'typlune',
+      name: 'Typlune',
+      tagline: 'Smart typing tools for the browser',
+      summary: 'Smart typing tools for faster browser text workflows, quick cleanup, and focused writing.',
+      description: 'Typlune is a lightweight Chrome extension from Yonal Studio for browser writing workflows.',
+      version: '1.0.0',
+      status: 'Coming soon',
+      storeUrl: 'https://chromewebstore.google.com/',
+      iconUrl: '',
+      features: 'Quick text cleanup|Writing workflow shortcuts|Lightweight browser UI|No third-party analytics',
+      privacyEffectiveDate: '2026-08-15',
+      privacyPolicy: 'Typlune Privacy Policy\n\nEffective date: 2026-08-15\n\nTyplune is designed to keep the user experience simple and privacy-aware.\n\nData collection: Typlune does not sell personal data and does not use third-party analytics. The extension only uses permissions required for its stated browser features.\n\nData sharing: Yonal Studio does not sell user data and does not share user data with advertising platforms, data brokers, or information resellers.\n\nLimited Use: The use of information received from Chrome extension APIs will adhere to the Chrome Web Store User Data Policy, including the Limited Use requirements.\n\nSupport contact: yonalsolutions@gmail.com or https://t.me/websipX.',
+      published: 'true'
+    }];
+
+    document.getElementById('navLogo').src = LOGO;
+    document.getElementById('heroLogo').src = LOGO;
+
+    function parseCsv(input) {
+      const rows = [];
+      let row = [];
+      let value = '';
+      let quoted = false;
+      for (let i = 0; i < input.length; i += 1) {
+        const char = input[i];
+        const next = input[i + 1];
+        if (char === '"' && quoted && next === '"') { value += '"'; i += 1; }
+        else if (char === '"') quoted = !quoted;
+        else if (char === ',' && !quoted) { row.push(value); value = ''; }
+        else if ((char === '\n' || char === '\r') && !quoted) {
+          if (value || row.length) { row.push(value); rows.push(row); row = []; value = ''; }
+          if (char === '\r' && next === '\n') i += 1;
+        } else value += char;
+      }
+      if (value || row.length) { row.push(value); rows.push(row); }
+      return rows;
+    }
+
+    function cleanId(value) {
+      return String(value || '').toLowerCase().trim().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    }
+
+    function safeUrl(value, fallback = '#') {
+      try {
+        const url = new URL(String(value || ''), window.location.href);
+        return url.protocol === 'https:' || url.protocol === 'mailto:' ? url.href : fallback;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function features(value) {
+      return String(value || '').split(/[|;]/).map((item) => item.trim()).filter(Boolean).slice(0, 8);
+    }
+
+    function extensionLogo(item) {
+      const src = safeUrl(item.iconUrl, '');
+      return src || LOGO;
+    }
+
+    function createCard(item) {
+      const card = document.createElement('article');
+      card.className = 'card product-card';
+      card.innerHTML = `
+        <div class="shot">
+          <img class="extension-logo" alt="">
+          <div class="shot-lines"><span></span><span></span><span></span></div>
+        </div>
+        <p class="badge"></p>
+        <h3></h3>
+        <p class="muted"></p>
+        <ul></ul>
+        <div class="actions">
+          <a class="button primary" target="_blank" rel="noopener">Chrome Web Store</a>
+          <a class="button soft">🔐 Privacy</a>
+        </div>`;
+      card.querySelector('.extension-logo').src = extensionLogo(item);
+      card.querySelector('.extension-logo').alt = `${item.name || 'Extension'} logo`;
+      card.querySelector('.badge').textContent = `🟢 ${item.status || 'Published'}`;
+      card.querySelector('h3').textContent = item.name || 'Extension';
+      card.querySelector('.muted').textContent = item.summary || item.tagline || item.description || '';
+      const list = card.querySelector('ul');
+      features(item.features).forEach((feature) => {
+        const li = document.createElement('li');
+        li.textContent = feature;
+        list.appendChild(li);
+      });
+      card.querySelector('.primary').href = safeUrl(item.storeUrl, 'https://chromewebstore.google.com/');
+      card.querySelector('.soft').href = `?privacy=${encodeURIComponent(cleanId(item.id) || 'typlune')}`;
+      return card;
+    }
+
+    function renderPolicy(items) {
+      const params = new URLSearchParams(window.location.search);
+      const requested = cleanId(params.get('privacy')) || cleanId(window.location.hash.replace('#privacy-', ''));
+      const item = items.find((record) => cleanId(record.id) === requested) || items[0] || fallbackExtensions[0];
+      document.getElementById('policyName').textContent = `🔐 ${item.name || 'Extension'}`;
+      document.getElementById('policyTitle').textContent = `${item.name || 'Extension'} Privacy Policy`;
+      document.getElementById('policyDate').textContent = `Effective date: ${item.privacyEffectiveDate || '2026-08-15'}`;
+      document.getElementById('policyBody').textContent = item.privacyPolicy || fallbackExtensions[0].privacyPolicy;
+      if (requested) document.getElementById('privacy').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderPolicyList(items) {
+      const list = document.getElementById('policyList');
+      list.textContent = '';
+      items.forEach((item) => {
+        const link = document.createElement('a');
+        link.href = `?privacy=${encodeURIComponent(cleanId(item.id) || 'extension')}`;
+        link.textContent = `🔐 ${item.name || item.id || 'Extension'} privacy URL`;
+        list.appendChild(link);
+      });
+    }
+
+    function render(items) {
+      const published = items.filter((item) => String(item.published || '').toLowerCase().trim() === 'true');
+      const extensions = published.length ? published : fallbackExtensions;
+      const first = extensions[0];
+      document.getElementById('featuredName').textContent = first.name || 'Typlune';
+      document.getElementById('featuredSummary').textContent = first.summary || first.tagline || '';
+      const grid = document.getElementById('extensionGrid');
+      grid.querySelectorAll('.product-card').forEach((card) => card.remove());
+      const infoCard = grid.querySelector('.card:not(.product-card)');
+      extensions.forEach((item) => grid.insertBefore(createCard(item), infoCard));
+      renderPolicy(extensions);
+      renderPolicyList(extensions);
+    }
+
+    async function loadSheet() {
+      try {
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}&cache=${Date.now()}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Sheet failed: ${response.status}`);
+        const rows = parseCsv(await response.text());
+        const headers = rows.shift().map((header) => header.trim());
+        const records = rows.map((row) => Object.fromEntries(headers.map((header, index) => [header, row[index] || ''])));
+        render(records);
+      } catch (error) {
+        render(fallbackExtensions);
+      }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+    document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+
+    document.addEventListener('pointerdown', (event) => {
+      const burst = document.getElementById('touchBurst');
+      const colors = ['#06b6d4', '#2563eb', '#f97316', '#10b981', '#f43f5e'];
+      for (let i = 0; i < 14; i += 1) {
+        const spark = document.createElement('span');
+        const angle = (Math.PI * 2 * i) / 14;
+        const distance = 42 + Math.random() * 48;
+        spark.className = 'spark';
+        spark.style.left = `${event.clientX}px`;
+        spark.style.top = `${event.clientY}px`;
+        spark.style.background = colors[i % colors.length];
+        spark.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
+        spark.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+        burst.appendChild(spark);
+        setTimeout(() => spark.remove(), 760);
+      }
+
+      const target = event.target.closest('.button, .nav a, .contact, .links a, .policy-list a');
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.left = `${event.clientX - rect.left}px`;
+      ripple.style.top = `${event.clientY - rect.top}px`;
+      target.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 640);
+    });
+
+    loadSheet();
+  </script>
+</body>
+</html>
