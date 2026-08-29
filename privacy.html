@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy Policy | Yonal Studio</title>
   <meta name="description" content="Yonal Studio Chrome extension privacy policy.">
+  <link id="pageIcon" rel="icon" href="Yonal.png">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
   <div class="touch-layer" id="touchLayer" aria-hidden="true"></div>
   <main class="policy-shell">
     <header class="policy-top">
-      <img class="policy-logo logo-tile" id="policyLogo" src="Yonal.png" alt="Extension logo">
+      <img class="policy-logo logo-tile logo-placeholder" id="policyLogo" src="Yonal.png" alt="Extension logo">
       <div>
         <p class="eyebrow">Privacy Policy</p>
         <h1 id="policyTitle">Privacy Policy</h1>
@@ -19,8 +20,25 @@
       </div>
     </header>
     <article class="policy-card">
-      <pre id="policyBody"></pre>
+      <div class="policy-body" id="policyBody"></div>
     </article>
+
+    <footer class="policy-footer" aria-label="Privacy policy support links">
+      <div>
+        <strong>Yonal Studio</strong>
+        <p>Official privacy information for Chrome extensions published by Yonal Studio.</p>
+      </div>
+      <nav class="policy-footer-actions" aria-label="Support links">
+        <a class="button" href="mailto:yonalsolutions@gmail.com">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>
+          Contact
+        </a>
+        <a class="button" href="extensions.html">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18"/><path d="M3 12h18"/><path d="M5 5h14v14H5z"/></svg>
+          Extensions
+        </a>
+      </nav>
+    </footer>
   </main>
 
   <script src="assets/site.js"></script>
@@ -28,13 +46,13 @@
     loadExtensions().then((items) => {
       const item = selectedExtension(items);
       const logo = document.getElementById('policyLogo');
-      logo.src = logoFor(item);
       logo.alt = `${text(item.name, 'Extension')} logo`;
       logo.onerror = () => handleImageError(logo);
+      transitionPolicyLogo(logo, logoFor(item));
       document.title = `${text(item.name, 'Extension')} Privacy Policy | Yonal Studio`;
       document.getElementById('policyTitle').textContent = `${text(item.name, 'Extension')} Privacy Policy`;
       document.getElementById('policyDate').textContent = `Effective date: ${text(item.privacyEffectiveDate, '2026-08-16')}`;
-      document.getElementById('policyBody').textContent = displayPolicy(item);
+      renderPolicyDocument(document.getElementById('policyBody'), displayPolicy(item));
     });
   </script>
 </body>

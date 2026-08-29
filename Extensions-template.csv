@@ -1,18 +1,23 @@
 id,name,tagline,summary,description,version,status,storeUrl,iconUrl,features,privacyEffectiveDate,permissions,dataCollected,privacyPolicy,published
-typlune,Typlune,Smart typing tools for the browser,"Typlune helps you write cleaner browser text faster with quick formatting and productivity shortcuts.","Typlune is a lightweight Chrome extension from Yonal Studio for people who write often in the browser. It focuses on speed, clean text workflows, and simple controls without third-party analytics or unnecessary account requirements.",1.0.0,Coming soon,https://chromewebstore.google.com/,,"Quick text cleanup|Writing workflow shortcuts|Lightweight browser UI|No third-party analytics",2026-08-15,"Only the Chrome permissions required for the extension features shown in the Chrome Web Store listing.","Typlune does not sell personal data and does not use third-party analytics. Extension data is used only to provide the stated extension features.","Typlune Privacy Policy
+typlune-local-draft-recovery,Typlune - Local Draft Recovery,Recover lost web form text with private local draft snapshots.,"Typlune saves temporary local snapshots of text entered into supported website text fields and compatible rich-text editors, so users can recover drafts after refreshes, navigation, crashes, or accidental deletion.","Typlune is a local-only draft recovery extension for websites. It monitors supported text fields and compatible rich-text editors, saves temporary draft snapshots in the browser local extension database, and lets users copy, restore, pin, search, version, or delete saved drafts. Users can turn protection on or off globally, pause specific websites, and clear saved drafts at any time. Typlune is designed not to save password, OTP, payment-card, PIN, seed phrase, private-key, API-key, or similar sensitive fields. It does not include analytics, ads, remote executable code, account login, cloud sync, or a server API.",1.1.1,Coming soon,https://chromewebstore.google.com/,https://res.cloudinary.com/ikag87ay/image/upload/v1787579124/Typlune_Local_Draft_Recovery_icon.png,"Local draft snapshots|Recover lost text from web forms|Compatible rich-text editor support|Version history|Copy and restore drafts|No analytics or ads",2026-08-24,"Storage is used to save extension settings and local draft data. Alarms are used for periodic cleanup of expired drafts. Host permissions are used only to detect, save, and restore supported text fields on regular websites.","User-entered form text and rich-text editor content is stored locally in the browser profile with related recovery metadata. Typlune does not transmit draft data externally and does not use analytics or advertising.","Typlune - Local Draft Recovery Privacy Policy
 
-Effective date: 2026-08-15
+Overview
+Typlune stores draft recovery data locally in the user's browser profile using IndexedDB and chrome.storage.local. Draft text is used only to provide local draft recovery, version history, copy, restore, search, pin, delete, site pause, and cleanup features.
 
-Typlune is designed to keep the user experience simple and privacy-aware.
+Data stored locally
+Typlune may store user-entered form text and compatible rich-text editor content, website domain or origin, normalized page path, page title, field labels or attributes, field type, editor type, timestamps, character counts, draft previews, draft versions, pinned status, paused-site settings, and retention settings.
 
-Data collection: Typlune does not sell personal data and does not use third-party analytics. The extension only uses permissions required for its stated browser features.
+Sensitive data
+Typlune is designed not to save password, OTP, payment-card, PIN, seed phrase, private-key, API-key, or similar sensitive fields. It does not collect screenshots, cookies, authentication data, analytics logs, ad identifiers, or server-side account data.
 
-Local processing: Where possible, extension actions are handled locally in the browser.
+Data sharing and sale
+Typlune does not upload draft text to Yonal Studio servers. Yonal Studio does not sell user data, transfer user data to data brokers, or use user data for personalized, retargeted, or interest-based advertising.
 
-Data sharing and sale: Yonal Studio does not sell user data and does not transfer user data to advertising platforms, data brokers, information resellers, or unrelated third parties.
+External services
+The optional support button opens Buy Me a Coffee only after a direct user click and does not send draft data.
 
-Chrome Web Store Limited Use: The use and transfer of information received from Chrome extension APIs complies with the Chrome Web Store User Data Policy, including the Limited Use requirements.
+Chrome Web Store Limited Use
+The use and transfer of information received from Chrome extension APIs will adhere to the Chrome Web Store User Data Policy, including the Limited Use requirements.
 
-Support contact: For privacy questions, contact yonalsolutions@gmail.com or Telegram https://t.me/websipX.
-
-Changes: If this policy changes, the effective date will be updated on this page.",true
+Contact
+For privacy questions or user-requested help, contact Yonal Studio at yonalsolutions@gmail.com.",true

@@ -1,21 +1,43 @@
 const SHEET_ID = '1eaFO8uSvKf9EY0mEOXL4SU1K8xFIANxV0_RZ9KiDdHo';
 const SHEET_NAME = 'Extensions';
+const LOCAL_CSV = 'Extensions-template.csv';
 const DEFAULT_LOGO = 'Yonal.png';
 const FALLBACK_EXTENSIONS = [{
-  id: 'typlune',
-  name: 'Typlune',
-  tagline: 'Smart typing tools for the browser',
-  summary: 'Typlune helps you write cleaner browser text faster with quick formatting and productivity shortcuts.',
-  description: 'Typlune is a lightweight Chrome extension from Yonal Studio for people who write often in the browser.',
-  version: '1.0.0',
+  id: 'typlune-local-draft-recovery',
+  name: 'Typlune - Local Draft Recovery',
+  tagline: 'Recover lost web form text with private local draft snapshots.',
+  summary: 'Typlune saves temporary local snapshots of text entered into supported website text fields and compatible rich-text editors, so users can recover drafts after refreshes, navigation, crashes, or accidental deletion.',
+  description: 'Typlune is a local-only draft recovery extension for websites. It monitors supported text fields and compatible rich-text editors, saves temporary draft snapshots in the browser local extension database, and lets users copy, restore, pin, search, version, or delete saved drafts.',
+  version: '1.1.1',
   status: 'Coming soon',
   storeUrl: 'https://chromewebstore.google.com/',
-  iconUrl: '',
-  features: 'Quick text cleanup|Writing workflow shortcuts|Lightweight browser UI|No third-party analytics',
-  privacyEffectiveDate: '2026-08-15',
-  privacyPolicy: '',
-  permissions: 'Only the Chrome permissions required for the extension features shown in the Chrome Web Store listing.',
-  dataCollected: 'Typlune does not sell personal data and does not use third-party analytics. Extension data is used only to provide the stated extension features.',
+  iconUrl: 'https://res.cloudinary.com/ikag87ay/image/upload/v1787579124/Typlune_Local_Draft_Recovery_icon.png',
+  features: 'Local draft snapshots|Recover lost text from web forms|Version history|Copy and restore drafts|Pause saving on specific websites|No analytics or ads',
+  privacyEffectiveDate: '2026-08-24',
+  privacyPolicy: `Typlune - Local Draft Recovery Privacy Policy
+
+Overview
+Typlune stores draft recovery data locally in the user's browser profile using IndexedDB and chrome.storage.local. Draft text is used only to provide local draft recovery, version history, copy, restore, search, pin, delete, site pause, and cleanup features.
+
+Data stored locally
+Typlune may store user-entered form text and compatible rich-text editor content, website domain or origin, normalized page path, page title, field labels or attributes, field type, editor type, timestamps, character counts, draft previews, draft versions, pinned status, paused-site settings, and retention settings.
+
+Sensitive data
+Typlune is designed not to save password, OTP, payment-card, PIN, seed phrase, private-key, API-key, or similar sensitive fields. It does not collect screenshots, cookies, authentication data, analytics logs, ad identifiers, or server-side account data.
+
+Data sharing and sale
+Typlune does not upload draft text to Yonal Studio servers. Yonal Studio does not sell user data, transfer user data to data brokers, or use user data for personalized, retargeted, or interest-based advertising.
+
+External services
+The optional support button opens Buy Me a Coffee only after a direct user click and does not send draft data.
+
+Chrome Web Store Limited Use
+The use and transfer of information received from Chrome extension APIs will adhere to the Chrome Web Store User Data Policy, including the Limited Use requirements.
+
+Contact
+For privacy questions or user-requested help, contact Yonal Studio at yonalsolutions@gmail.com.`,
+  permissions: 'Storage is used to save extension settings and local draft data. Alarms are used for periodic cleanup of expired drafts. Host permissions are used only to detect, save, and restore supported text fields on regular websites.',
+  dataCollected: 'User-entered form text and rich-text editor content is stored locally in the browser profile with related recovery metadata. Typlune does not transmit draft data externally and does not use analytics or advertising.',
   published: 'true'
 }];
 
@@ -112,6 +134,30 @@ function handleImageError(image) {
   image.src = DEFAULT_LOGO;
 }
 
+function setPageIcon(value) {
+  const link = document.getElementById('pageIcon') || document.querySelector('link[rel="icon"]');
+  if (!link) return;
+  link.href = safeAssetUrl(value, DEFAULT_LOGO);
+}
+
+function transitionPolicyLogo(image, targetUrl) {
+  const nextUrl = safeAssetUrl(targetUrl, DEFAULT_LOGO);
+  if (nextUrl === DEFAULT_LOGO) return;
+
+  const preload = new Image();
+  preload.onload = () => {
+    image.classList.add('logo-switching');
+    setTimeout(() => {
+      image.src = nextUrl;
+      image.classList.remove('logo-placeholder');
+      setPageIcon(nextUrl);
+      requestAnimationFrame(() => image.classList.remove('logo-switching'));
+    }, 180);
+  };
+  preload.onerror = () => handleImageError(image);
+  preload.src = nextUrl;
+}
+
 function privacyUrl(item) {
   return `privacy.html?privacy=${encodeURIComponent(cleanId(item.id))}`;
 }
@@ -159,9 +205,49 @@ function displayPolicy(item) {
   return text(item.privacyPolicy, generatedPolicy(item))
     .replace(/https?:\/\/\S+/g, '')
     .replace(/\s+or Telegram\s*/gi, ' ')
+    .replace(/^published:\s*\w+\s*/gim, '')
+    .replace(/^C\.\s*Chrome Web Store Privacy Answers\s*/gim, 'Chrome Web Store Privacy Answers\n')
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+}
+
+function renderPolicyDocument(container, policyText) {
+  container.textContent = '';
+  const lines = String(policyText || '').split(/\n+/).map((line) => line.trim()).filter(Boolean);
+  const title = lines.shift();
+  const fragment = document.createDocumentFragment();
+
+  if (title && !/privacy policy$/i.test(title)) {
+    lines.unshift(title);
+  }
+
+  let section = null;
+  const headingPattern = /^(overview|data collection and use|data stored locally|data sharing and sale|permissions|sensitive data|external services|chrome web store limited use|chrome web store privacy answers|security|children|changes|contact|does .+\?)$/i;
+
+  lines.forEach((line) => {
+    if (headingPattern.test(line) || /^[A-Z][A-Za-z\s]+:$/.test(line)) {
+      section = document.createElement('section');
+      section.className = 'policy-section';
+      const heading = document.createElement('h2');
+      heading.textContent = line.replace(/:$/, '');
+      section.appendChild(heading);
+      fragment.appendChild(section);
+      return;
+    }
+
+    if (!section) {
+      section = document.createElement('section');
+      section.className = 'policy-section';
+      fragment.appendChild(section);
+    }
+
+    const paragraph = document.createElement('p');
+    paragraph.textContent = line;
+    section.appendChild(paragraph);
+  });
+
+  container.appendChild(fragment);
 }
 
 function normalizedRecords(rows) {
@@ -174,18 +260,30 @@ function normalizedRecords(rows) {
 }
 
 async function loadExtensions() {
+  const parsePublishedCsv = (csv) => normalizedRecords(parseCsv(csv)).filter(isPublished);
+
   try {
     const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}&cache=${Date.now()}`;
     const response = await fetch(sheetUrl);
     if (!response.ok) throw new Error('Sheet request failed');
     const csv = await response.text();
     if (/<!doctype html|<html/i.test(csv)) throw new Error('Unexpected sheet response');
-    const records = normalizedRecords(parseCsv(csv)).filter(isPublished);
-    return records.length ? records : FALLBACK_EXTENSIONS;
+    const records = parsePublishedCsv(csv);
+    if (records.length) return records;
   } catch (error) {
     console.warn(error);
-    return FALLBACK_EXTENSIONS;
   }
+
+  try {
+    const response = await fetch(`${LOCAL_CSV}?cache=${Date.now()}`);
+    if (!response.ok) throw new Error('Local CSV request failed');
+    const records = parsePublishedCsv(await response.text());
+    if (records.length) return records;
+  } catch (error) {
+    console.warn(error);
+  }
+
+  return FALLBACK_EXTENSIONS;
 }
 
 function createExtensionCard(item) {
