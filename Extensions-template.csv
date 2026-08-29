@@ -2,16 +2,16 @@ id,name,tagline,summary,description,version,status,storeUrl,iconUrl,features,pri
 typlune-local-draft-recovery,Typlune - Local Draft Recovery,Recover lost web form text with private local draft snapshots.,"Typlune saves temporary local snapshots of text entered into supported website text fields and compatible rich-text editors, so users can recover drafts after refreshes, navigation, crashes, or accidental deletion.","Typlune is a local-only draft recovery extension for websites. It monitors supported text fields and compatible rich-text editors, saves temporary draft snapshots in the browser local extension database, and lets users copy, restore, pin, search, version, or delete saved drafts. Users can turn protection on or off globally, pause specific websites, and clear saved drafts at any time. Typlune is designed not to save password, OTP, payment-card, PIN, seed phrase, private-key, API-key, or similar sensitive fields. It does not include analytics, ads, remote executable code, account login, cloud sync, or a server API.",1.1.1,Coming soon,https://chromewebstore.google.com/,https://res.cloudinary.com/ikag87ay/image/upload/v1787579124/Typlune_Local_Draft_Recovery_icon.png,"Local draft snapshots|Recover lost text from web forms|Compatible rich-text editor support|Version history|Copy and restore drafts|No analytics or ads",2026-08-24,"Storage is used to save extension settings and local draft data. Alarms are used for periodic cleanup of expired drafts. Host permissions are used only to detect, save, and restore supported text fields on regular websites.","User-entered form text and rich-text editor content is stored locally in the browser profile with related recovery metadata. Typlune does not transmit draft data externally and does not use analytics or advertising.","Typlune - Local Draft Recovery Privacy Policy
 
 Overview
-Typlune stores draft recovery data locally in the user's browser profile using IndexedDB and chrome.storage.local. Draft text is used only to provide local draft recovery, version history, copy, restore, search, pin, delete, site pause, and cleanup features.
+Typlune saves draft recovery data only on the user's device. It uses the data only for local draft recovery features.
 
 Data stored locally
-Typlune may store user-entered form text and compatible rich-text editor content, website domain or origin, normalized page path, page title, field labels or attributes, field type, editor type, timestamps, character counts, draft previews, draft versions, pinned status, paused-site settings, and retention settings.
+Draft text, draft previews, draft versions, timestamps, pinned status, paused-site settings, retention settings, website domain or origin, normalized page path, page title, field type, editor type, character counts, and field labels or attributes.
 
 Sensitive data
-Typlune is designed not to save password, OTP, payment-card, PIN, seed phrase, private-key, API-key, or similar sensitive fields. It does not collect screenshots, cookies, authentication data, analytics logs, ad identifiers, or server-side account data.
+Typlune is designed not to save password, OTP, payment-card, PIN, seed phrase, private-key, API-key, or similar sensitive fields. It does not collect screenshots, cookies, authentication data, analytics logs, or ad identifiers.
 
 Data sharing and sale
-Typlune does not upload draft text to Yonal Studio servers. Yonal Studio does not sell user data, transfer user data to data brokers, or use user data for personalized, retargeted, or interest-based advertising.
+Typlune does not upload draft text to Yonal Studio servers. Yonal Studio does not sell user data, share user data with data brokers, or use user data for advertising.
 
 External services
 The optional support button opens Buy Me a Coffee only after a direct user click and does not send draft data.

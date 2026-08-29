@@ -17,16 +17,16 @@ const FALLBACK_EXTENSIONS = [{
   privacyPolicy: `Typlune - Local Draft Recovery Privacy Policy
 
 Overview
-Typlune stores draft recovery data locally in the user's browser profile using IndexedDB and chrome.storage.local. Draft text is used only to provide local draft recovery, version history, copy, restore, search, pin, delete, site pause, and cleanup features.
+Typlune saves draft recovery data only on the user's device. It uses the data only for local draft recovery features.
 
 Data stored locally
-Typlune may store user-entered form text and compatible rich-text editor content, website domain or origin, normalized page path, page title, field labels or attributes, field type, editor type, timestamps, character counts, draft previews, draft versions, pinned status, paused-site settings, and retention settings.
+Draft text, draft previews, draft versions, timestamps, pinned status, paused-site settings, retention settings, website domain or origin, normalized page path, page title, field type, editor type, character counts, and field labels or attributes.
 
 Sensitive data
-Typlune is designed not to save password, OTP, payment-card, PIN, seed phrase, private-key, API-key, or similar sensitive fields. It does not collect screenshots, cookies, authentication data, analytics logs, ad identifiers, or server-side account data.
+Typlune is designed not to save password, OTP, payment-card, PIN, seed phrase, private-key, API-key, or similar sensitive fields. It does not collect screenshots, cookies, authentication data, analytics logs, or ad identifiers.
 
 Data sharing and sale
-Typlune does not upload draft text to Yonal Studio servers. Yonal Studio does not sell user data, transfer user data to data brokers, or use user data for personalized, retargeted, or interest-based advertising.
+Typlune does not upload draft text to Yonal Studio servers. Yonal Studio does not sell user data, share user data with data brokers, or use user data for advertising.
 
 External services
 The optional support button opens Buy Me a Coffee only after a direct user click and does not send draft data.
@@ -130,6 +130,10 @@ function handleImageError(image) {
   image.src = DEFAULT_LOGO;
 }
 
+function isPublished(item) {
+  return ['true', 'yes', '1', 'published'].includes(String(item.published || '').toLowerCase().trim());
+}
+
 function transitionPolicyLogo(image, targetUrl) {
   const nextUrl = safeAssetUrl(targetUrl, DEFAULT_LOGO);
   if (nextUrl === DEFAULT_LOGO) return;
@@ -212,7 +216,7 @@ function normalizedRecords(rows) {
 }
 
 async function loadExtensions() {
-  const parseExtensionCsv = (csv) => normalizedRecords(parseCsv(csv));
+  const parsePublishedCsv = (csv) => normalizedRecords(parseCsv(csv)).filter(isPublished);
 
   try {
     const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}&cache=${Date.now()}`;
@@ -220,7 +224,7 @@ async function loadExtensions() {
     if (!response.ok) throw new Error('Sheet request failed');
     const csv = await response.text();
     if (/<!doctype html|<html/i.test(csv)) throw new Error('Unexpected sheet response');
-    const records = parseExtensionCsv(csv);
+    const records = parsePublishedCsv(csv);
     if (records.length) return records;
   } catch (error) {
     console.warn(error);
@@ -229,7 +233,7 @@ async function loadExtensions() {
   try {
     const response = await fetch(`${LOCAL_CSV}?cache=${Date.now()}`);
     if (!response.ok) throw new Error('Local CSV request failed');
-    const records = parseExtensionCsv(await response.text());
+    const records = parsePublishedCsv(await response.text());
     if (records.length) return records;
   } catch (error) {
     console.warn(error);
