@@ -34,8 +34,8 @@ The optional support button opens Buy Me a Coffee only after a direct user click
 Chrome Web Store Limited Use
 The use and transfer of information received from Chrome extension APIs will adhere to the Chrome Web Store User Data Policy, including the Limited Use requirements.
 
-Contact
-For privacy questions or user-requested help, contact Yonal Studio at yonalsolutions@gmail.com.`,
+yonalsolutions@gmail.com
+For privacy questions or user-requested help, email yonalsolutions@gmail.com.`,
   permissions: 'Storage is used to save extension settings and local draft data. Alarms are used for periodic cleanup of expired drafts. Host permissions are used only to detect, save, and restore supported text fields on regular websites.',
   dataCollected: 'User-entered form text and rich-text editor content is stored locally in the browser profile with related recovery metadata. Typlune does not transmit draft data externally and does not use analytics or advertising.',
   published: 'true'
@@ -112,10 +112,6 @@ function safeAssetUrl(value, fallback = DEFAULT_LOGO) {
   }
 }
 
-function isPublished(item) {
-  return ['true', 'yes', '1', 'published'].includes(String(item.published || '').toLowerCase().trim());
-}
-
 function splitFeatures(value) {
   return String(value || '')
     .split(/[|;]/)
@@ -155,51 +151,14 @@ function privacyUrl(item) {
   return `privacy.html?privacy=${encodeURIComponent(cleanId(item.id))}`;
 }
 
-function generatedPolicy(item) {
-  const name = text(item.name, 'This extension');
-  const effectiveDate = text(item.privacyEffectiveDate, '2026-08-16');
-  const description = text(item.description, text(item.summary, `${name} is a Chrome extension published by Yonal Studio.`));
-  const permissions = text(item.permissions, 'The extension requests only the Chrome permissions required for its stated features.');
-  const dataCollected = text(item.dataCollected, 'The extension does not sell personal data and does not use user data for advertising.');
-
-  return `${name} Privacy Policy
-
-Effective date: ${effectiveDate}
-
-Overview
-${description}
-
-Data collection and use
-${dataCollected}
-
-Permissions
-${permissions}
-
-Data sharing and sale
-Yonal Studio does not sell user data. Yonal Studio does not transfer user data to advertising platforms, data brokers, information resellers, or unrelated third parties.
-
-Chrome Web Store Limited Use
-The use and transfer of information received from Chrome extension APIs complies with the Chrome Web Store User Data Policy, including the Limited Use requirements.
-
-Security
-Yonal Studio uses reasonable care to keep extension behavior limited to the features described in the extension listing and this policy.
-
-Children
-Yonal Studio extensions are not directed to children under 13.
-
-Changes
-If this policy changes, the effective date on this page will be updated.
-
-Contact
-For privacy questions or data requests, contact Yonal Studio by email at yonalsolutions@gmail.com.`;
-}
-
 function displayPolicy(item) {
-  return text(item.privacyPolicy, generatedPolicy(item))
+  return text(item.privacyPolicy, 'Privacy policy content is not available for this extension yet. Email yonalsolutions@gmail.com for privacy questions.')
     .replace(/https?:\/\/\S+/g, '')
     .replace(/\s+or Telegram\s*/gi, ' ')
     .replace(/^published:\s*\w+\s*/gim, '')
     .replace(/^C\.\s*Chrome Web Store Privacy Answers\s*/gim, 'Chrome Web Store Privacy Answers\n')
+    .replace(/^\|.*\|$/gm, '')
+    .replace(/^-{2,}$/gm, '')
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
@@ -216,7 +175,7 @@ function renderPolicyDocument(container, policyText) {
   }
 
   let section = null;
-  const headingPattern = /^(overview|data collection and use|data stored locally|data sharing and sale|permissions|sensitive data|external services|chrome web store limited use|chrome web store privacy answers|security|children|changes|contact|does .+\?)$/i;
+  const headingPattern = /^(overview|data collection and use|data stored locally|data sharing and sale|permissions|sensitive data|external services|chrome web store limited use|chrome web store privacy answers|security|children|changes|yonalsolutions@gmail\.com|does .+\?)$/i;
 
   lines.forEach((line) => {
     if (headingPattern.test(line) || /^[A-Z][A-Za-z\s]+:$/.test(line)) {
@@ -253,7 +212,7 @@ function normalizedRecords(rows) {
 }
 
 async function loadExtensions() {
-  const parsePublishedCsv = (csv) => normalizedRecords(parseCsv(csv)).filter(isPublished);
+  const parseExtensionCsv = (csv) => normalizedRecords(parseCsv(csv));
 
   try {
     const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}&cache=${Date.now()}`;
@@ -261,7 +220,7 @@ async function loadExtensions() {
     if (!response.ok) throw new Error('Sheet request failed');
     const csv = await response.text();
     if (/<!doctype html|<html/i.test(csv)) throw new Error('Unexpected sheet response');
-    const records = parsePublishedCsv(csv);
+    const records = parseExtensionCsv(csv);
     if (records.length) return records;
   } catch (error) {
     console.warn(error);
@@ -270,7 +229,7 @@ async function loadExtensions() {
   try {
     const response = await fetch(`${LOCAL_CSV}?cache=${Date.now()}`);
     if (!response.ok) throw new Error('Local CSV request failed');
-    const records = parsePublishedCsv(await response.text());
+    const records = parseExtensionCsv(await response.text());
     if (records.length) return records;
   } catch (error) {
     console.warn(error);

@@ -160,6 +160,8 @@ a { color: inherit; }
 .button {
   gap: 8px;
   padding: 0 14px;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
 
 .icon-button {
@@ -604,6 +606,8 @@ h3 {
   color: var(--brand-dark);
   font-weight: 800;
   text-decoration: none;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
 
 .footer-links a:hover {
@@ -679,7 +683,7 @@ ul.clean-list {
   .nav a {
     min-width: 0;
     padding-inline: 8px;
-    font-size: 0.84rem;
+    font-size: 0.78rem;
   }
 
   .hero,
@@ -761,6 +765,11 @@ ul.clean-list {
 
   .policy-footer-actions .button {
     flex: 1 1 140px;
+  }
+
+  .nav a,
+  .footer-links a {
+    font-size: 0.74rem;
   }
 
   .footer {
