@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="yonal-cyan" x1="42" y1="8" x2="28" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#30e7f3"/>
+      <stop offset="0.45" stop-color="#13aede"/>
+      <stop offset="1" stop-color="#35e5f4"/>
+    </linearGradient>
+    <linearGradient id="yonal-navy" x1="12" y1="8" x2="33" y2="55" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#11183f"/>
+      <stop offset="1" stop-color="#050922"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#yonal-navy)" d="M9 7h12l16 24v25L25 61V36L9 7z"/>
+  <path fill="url(#yonal-cyan)" d="M37 31 52 7h13L46 37v17L33 63V35L16 7h12l13 22z"/>
+  <path fill="#07102e" opacity="0.55" d="M22 13h7l13 20v19l-5 4V35L22 13z"/>
+  <path fill="#0c163c" opacity="0.42" d="M47 14h8L44 32l-4-4 7-14z"/>
+</svg>

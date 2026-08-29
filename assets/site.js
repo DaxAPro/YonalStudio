@@ -134,12 +134,6 @@ function handleImageError(image) {
   image.src = DEFAULT_LOGO;
 }
 
-function setPageIcon(value) {
-  const link = document.getElementById('pageIcon') || document.querySelector('link[rel="icon"]');
-  if (!link) return;
-  link.href = safeAssetUrl(value, DEFAULT_LOGO);
-}
-
 function transitionPolicyLogo(image, targetUrl) {
   const nextUrl = safeAssetUrl(targetUrl, DEFAULT_LOGO);
   if (nextUrl === DEFAULT_LOGO) return;
@@ -150,7 +144,6 @@ function transitionPolicyLogo(image, targetUrl) {
     setTimeout(() => {
       image.src = nextUrl;
       image.classList.remove('logo-placeholder');
-      setPageIcon(nextUrl);
       requestAnimationFrame(() => image.classList.remove('logo-switching'));
     }, 180);
   };
