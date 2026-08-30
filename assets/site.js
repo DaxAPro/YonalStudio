@@ -213,6 +213,7 @@ function renderPolicyMeta(container, item) {
   container.textContent = '';
   [
     ['Version', item.version],
+    ['Features', splitFeatures(item.features).join(', ')],
     ['Permissions', item.permissions],
     ['Data collected', item.dataCollected]
   ].forEach(([label, value]) => {
