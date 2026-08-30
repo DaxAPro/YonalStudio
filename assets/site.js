@@ -274,7 +274,6 @@ function createExtensionCard(item) {
         <p class="muted"></p>
       </div>
     </div>
-    <ul class="clean-list"></ul>
     <div class="actions">
       <a class="button primary store-button" target="_blank" rel="noopener" aria-label="Open Chrome Web Store">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14.9-4"/><path d="M20 12a8 8 0 0 1-12 6.9"/><path d="M8 18.9A8 8 0 0 1 4 12"/><circle cx="12" cy="12" r="3"/></svg>
@@ -294,14 +293,6 @@ function createExtensionCard(item) {
   card.querySelector('p').textContent = text(item.summary, text(item.tagline, text(item.description)));
   card.querySelector('.store-button').href = safeUrl(item.storeUrl, 'https://chromewebstore.google.com/');
   card.querySelector('.privacy-button').href = privacyUrl(item);
-
-  const list = card.querySelector('ul');
-  const features = splitFeatures(item.features);
-  (features.length ? features : ['Simple privacy policy', 'Official support available']).forEach((feature) => {
-    const li = document.createElement('li');
-    li.textContent = feature;
-    list.appendChild(li);
-  });
 
   return card;
 }
