@@ -28,23 +28,6 @@
     <article class="policy-card">
       <div class="policy-body" id="policyBody"></div>
     </article>
-
-    <footer class="policy-footer" aria-label="Privacy policy support links">
-      <div>
-        <strong>Yonal Studio</strong>
-        <p>Official privacy information for Chrome extensions from yonalsolutions@gmail.com.</p>
-      </div>
-      <nav class="policy-footer-actions" aria-label="Support links">
-        <a class="button" href="mailto:yonalsolutions@gmail.com">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>
-          yonalsolutions@gmail.com
-        </a>
-        <a class="button" id="policyBackFooter" href="extensions.html">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18"/><path d="M3 12h18"/><path d="M5 5h14v14H5z"/></svg>
-          Back
-        </a>
-      </nav>
-    </footer>
   </main>
 
   <script src="assets/site.js"></script>
@@ -57,7 +40,6 @@
       logo.onerror = () => handleImageError(logo);
       transitionPolicyLogo(logo, logoFor(item));
       document.querySelector('.policy-back').href = backUrl;
-      document.getElementById('policyBackFooter').href = backUrl;
       document.title = `${text(item.name, 'Extension')} Privacy Policy | Yonal Studio`;
       document.getElementById('policyTitle').textContent = `${text(item.name, 'Extension')} Privacy Policy`;
       document.getElementById('policyDate').textContent = `Effective date: ${text(item.privacyEffectiveDate, '2026-08-16')}`;

@@ -12,7 +12,7 @@ const FALLBACK_EXTENSIONS = [{
   status: 'Coming soon',
   storeUrl: 'https://chromewebstore.google.com/',
   iconUrl: 'https://res.cloudinary.com/ikag87ay/image/upload/v1787579124/Typlune_Local_Draft_Recovery_icon.png',
-  features: 'Local draft snapshots|Recover lost text from web forms|Version history|Copy and restore drafts|Pause saving on specific websites|No analytics or ads',
+  features: 'Local draft snapshots|Recover lost text from web forms|Rich-text editor support|Version history|Copy and restore drafts|Pin important drafts',
   privacyEffectiveDate: '2026-08-24',
   privacyPolicy: `Overview
 Typlune saves draft recovery data only on the user's device. It uses the data only for local draft recovery features.
@@ -34,8 +34,8 @@ The use and transfer of information received from Chrome extension APIs will adh
 
 yonalsolutions@gmail.com
 For privacy questions or user-requested help, email yonalsolutions@gmail.com.`,
-  permissions: 'Storage is used to save extension settings and local draft data. Alarms are used for periodic cleanup of expired drafts. Host permissions are used only to detect, save, and restore supported text fields on regular websites.',
-  dataCollected: 'User-entered form text and rich-text editor content is stored locally in the browser profile with related recovery metadata. Typlune does not transmit draft data externally and does not use analytics or advertising.',
+  permissions: 'storage: saves local drafts and settings|alarms: cleans expired drafts|host permissions: detects supported text fields on websites',
+  dataCollected: 'Draft text and previews|Draft versions and timestamps|Pinned status and retention settings|Website domain or origin, page path, page title, field type, editor type, character counts, and field labels',
   published: 'true'
 }];
 
@@ -116,6 +116,15 @@ function splitFeatures(value) {
     .map((item) => item.trim())
     .filter(Boolean)
     .slice(0, 6);
+}
+
+function splitMetaItems(value) {
+  return String(value || '')
+    .replace(/\bRemove activeTab[^.]*\./gi, '')
+    .split(/[|;]/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .slice(0, 8);
 }
 
 function logoFor(item) {
@@ -212,18 +221,32 @@ function renderPolicyDocument(container, policyText) {
 function renderPolicyMeta(container, item) {
   container.textContent = '';
   [
-    ['Version', item.version],
-    ['Features', splitFeatures(item.features).join(', ')],
-    ['Permissions', item.permissions],
-    ['Data collected', item.dataCollected]
-  ].forEach(([label, value]) => {
-    const cleanValue = text(value);
-    if (!cleanValue) return;
+    ['Version', item.version, false],
+    ['Features', splitFeatures(item.features), true],
+    ['Permissions', splitMetaItems(item.permissions), true],
+    ['Data collected', splitMetaItems(item.dataCollected), true]
+  ].forEach(([label, value, isList]) => {
+    const values = Array.isArray(value) ? value : [value];
+    const cleanValues = values.map((entry) => text(entry)).filter(Boolean);
+    if (!cleanValues.length) return;
+    const itemNode = document.createElement('div');
+    itemNode.className = 'policy-meta-item';
     const term = document.createElement('dt');
     const detail = document.createElement('dd');
     term.textContent = label;
-    detail.textContent = cleanValue;
-    container.append(term, detail);
+    if (isList) {
+      const list = document.createElement('ul');
+      cleanValues.forEach((entry) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = entry;
+        list.appendChild(listItem);
+      });
+      detail.appendChild(list);
+    } else {
+      detail.textContent = cleanValues[0];
+    }
+    itemNode.append(term, detail);
+    container.appendChild(itemNode);
   });
 }
 

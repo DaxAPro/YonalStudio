@@ -510,7 +510,7 @@ h3 {
 
 .policy-meta-card {
   margin-bottom: 20px;
-  padding: 18px 20px;
+  padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.82);
@@ -524,10 +524,17 @@ h3 {
   margin: 0;
 }
 
+.policy-meta-item {
+  padding: 14px;
+  border: 1px solid rgba(217, 229, 234, 0.78);
+  border-radius: 8px;
+  background: rgba(248, 251, 252, 0.72);
+}
+
 .policy-meta dt,
-.policy-meta dd {
+.policy-meta dd,
+.policy-meta ul {
   margin: 0;
-  line-height: 1.48;
 }
 
 .policy-meta dt {
@@ -541,7 +548,14 @@ h3 {
 .policy-meta dd {
   color: var(--muted);
   font-size: 0.9rem;
+  line-height: 1.5;
   overflow-wrap: anywhere;
+}
+
+.policy-meta ul {
+  display: grid;
+  gap: 6px;
+  padding-left: 18px;
 }
 
 .policy-top h1 {
@@ -597,36 +611,6 @@ h3 {
 
 .policy-section p:last-child {
   margin-bottom: 0;
-}
-
-.policy-footer {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 18px;
-  margin-top: 20px;
-  padding: 20px 22px;
-  border: 1px solid rgba(217, 229, 234, 0.9);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.72);
-}
-
-.policy-footer strong {
-  display: block;
-  margin-bottom: 4px;
-}
-
-.policy-footer p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-.policy-footer-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 10px;
 }
 
 .linkless {
@@ -767,17 +751,8 @@ ul.clean-list {
     min-height: 320px;
   }
 
-  .policy-footer {
-    grid-template-columns: 1fr;
-  }
-
-  .policy-footer-actions {
-    justify-content: flex-start;
-  }
-
   .policy-meta {
     grid-template-columns: 1fr;
-    gap: 4px;
   }
 
   .policy-section { padding: 24px 22px; }
@@ -830,14 +805,6 @@ ul.clean-list {
 
   .policy-shell {
     padding-top: 28px;
-  }
-
-  .policy-footer {
-    padding: 16px;
-  }
-
-  .policy-footer-actions .button {
-    flex: 1 1 140px;
   }
 
   .nav a,
