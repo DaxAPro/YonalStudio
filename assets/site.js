@@ -32,7 +32,20 @@ The optional support button opens Buy Me a Coffee only after a direct user click
 Chrome Web Store Limited Use
 The use and transfer of information received from Chrome extension APIs will adhere to the Chrome Web Store User Data Policy, including the Limited Use requirements.
 
-yonalsolutions@gmail.com
+Chrome Web Store Privacy Answers
+Does Typlune collect personal data?
+Yes. Typlune stores draft text and recovery metadata locally in the user's browser profile.
+
+Does Typlune transmit data externally?
+No. Draft data is not uploaded to Yonal Studio servers.
+
+Does Typlune use data for ads or analytics?
+No. Typlune does not use advertising or analytics.
+
+Does Typlune sell or share user data?
+No. Yonal Studio does not sell or share Typlune draft data.
+
+Contact
 For privacy questions or user-requested help, email yonalsolutions@gmail.com.`,
   permissions: 'storage: saves local drafts and settings|alarms: cleans expired drafts|host permissions: detects supported text fields on websites',
   dataCollected: 'Draft text and previews|Draft versions and timestamps|Pinned status and retention settings|Website domain or origin, page path, page title, field type, editor type, character counts, and field labels',
@@ -172,10 +185,7 @@ function displayPolicy(item) {
     .replace(/^.*privacy policy\s*$/gim, '')
     .replace(/^effective date:.*$/gim, '')
     .replace(/^published:\s*\w+\s*/gim, '')
-    .replace(/^C\.\s*Chrome Web Store Privacy Answers[\s\S]*$/gim, '')
-    .replace(/^Chrome Web Store Privacy Answers[\s\S]*$/gim, '')
-    .replace(/^yonalsolutions@gmail\.com\s*\n?/gim, '')
-    .replace(/^For privacy questions.*yonalsolutions@gmail\.com\.?\s*$/gim, '')
+    .replace(/^C\.\s*Chrome Web Store Privacy Answers\s*/gim, 'Chrome Web Store Privacy Answers\n')
     .replace(/^\|.*\|$/gm, '')
     .replace(/^-{2,}$/gm, '')
     .replace(/[ \t]+\n/g, '\n')
@@ -194,7 +204,7 @@ function renderPolicyDocument(container, policyText) {
   }
 
   let section = null;
-  const headingPattern = /^(overview|data collection and use|data stored locally|data sharing and sale|permissions|sensitive data|external services|chrome web store limited use|chrome web store privacy answers|security|children|changes|yonalsolutions@gmail\.com|does .+\?)$/i;
+  const headingPattern = /^(overview|data collection and use|data stored locally|data sharing and sale|permissions|sensitive data|external services|chrome web store limited use|chrome web store privacy answers|security|children|changes|contact|does .+\?)$/i;
 
   lines.forEach((line) => {
     if (headingPattern.test(line) || /^[A-Z][A-Za-z\s]+:$/.test(line)) {
