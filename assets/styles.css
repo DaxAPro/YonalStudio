@@ -679,33 +679,6 @@ ul.clean-list {
   line-height: 1.58;
 }
 
-.extension-meta {
-  display: grid;
-  grid-template-columns: minmax(112px, 0.35fr) minmax(0, 1fr);
-  gap: 8px 12px;
-  margin: 18px 0 0;
-  padding: 16px 0 0;
-  border-top: 1px solid rgba(217, 229, 234, 0.86);
-}
-
-.extension-meta dt,
-.extension-meta dd {
-  margin: 0;
-  line-height: 1.45;
-}
-
-.extension-meta dt {
-  color: var(--text);
-  font-size: 0.78rem;
-  font-weight: 900;
-}
-
-.extension-meta dd {
-  color: var(--muted);
-  font-size: 0.84rem;
-  overflow-wrap: anywhere;
-}
-
 @keyframes revealUp {
   to { opacity: 1; transform: translateY(0); }
 }
@@ -868,11 +841,6 @@ ul.clean-list {
 
   .policy-footer-actions .button {
     flex: 1 1 140px;
-  }
-
-  .extension-meta {
-    grid-template-columns: 1fr;
-    gap: 4px;
   }
 
   .nav a,
