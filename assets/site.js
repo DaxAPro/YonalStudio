@@ -246,6 +246,7 @@ async function loadExtensions() {
 function createExtensionCard(item) {
   const card = document.createElement('article');
   card.className = 'extension-card';
+  card.id = cleanId(item.id);
   card.innerHTML = `
     <div class="extension-head">
       <img class="logo-tile" alt="">

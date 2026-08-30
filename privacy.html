@@ -11,6 +11,10 @@
 <body>
   <div class="touch-layer" id="touchLayer" aria-hidden="true"></div>
   <main class="policy-shell">
+    <a class="policy-back" href="extensions.html" aria-label="Back to extensions">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Back to extensions
+    </a>
     <header class="policy-top">
       <img class="policy-logo logo-tile logo-placeholder" id="policyLogo" src="Yonal.png" alt="Extension logo">
       <div>
@@ -33,9 +37,9 @@
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>
           yonalsolutions@gmail.com
         </a>
-        <a class="button" href="extensions.html">
+        <a class="button" id="policyBackFooter" href="extensions.html">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18"/><path d="M3 12h18"/><path d="M5 5h14v14H5z"/></svg>
-          Extensions
+          Back
         </a>
       </nav>
     </footer>
@@ -46,9 +50,12 @@
     loadExtensions().then((items) => {
       const item = selectedExtension(items);
       const logo = document.getElementById('policyLogo');
+      const backUrl = `extensions.html#${encodeURIComponent(cleanId(item.id))}`;
       logo.alt = `${text(item.name, 'Extension')} logo`;
       logo.onerror = () => handleImageError(logo);
       transitionPolicyLogo(logo, logoFor(item));
+      document.querySelector('.policy-back').href = backUrl;
+      document.getElementById('policyBackFooter').href = backUrl;
       document.title = `${text(item.name, 'Extension')} Privacy Policy | Yonal Studio`;
       document.getElementById('policyTitle').textContent = `${text(item.name, 'Extension')} Privacy Policy`;
       document.getElementById('policyDate').textContent = `Effective date: ${text(item.privacyEffectiveDate, '2026-08-16')}`;
