@@ -207,6 +207,25 @@ function renderPolicyDocument(container, policyText) {
   container.appendChild(fragment);
 }
 
+function renderPolicyMeta(container, item) {
+  container.textContent = '';
+  [
+    ['Version', item.version],
+    ['Features', splitFeatures(item.features).join(', ')],
+    ['Privacy effective date', item.privacyEffectiveDate],
+    ['Permissions', item.permissions],
+    ['Data collected', item.dataCollected]
+  ].forEach(([label, value]) => {
+    const cleanValue = text(value);
+    if (!cleanValue) return;
+    const term = document.createElement('dt');
+    const detail = document.createElement('dd');
+    term.textContent = label;
+    detail.textContent = cleanValue;
+    container.append(term, detail);
+  });
+}
+
 function normalizedRecords(rows) {
   if (!rows.length) return [];
   const headers = rows.shift().map((header) => header.trim());

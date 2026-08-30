@@ -464,19 +464,11 @@ h3 {
 }
 
 .policy-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 38px;
+  width: 42px;
   margin-bottom: 18px;
-  padding: 0 12px;
   border: 1px solid rgba(217, 229, 234, 0.9);
-  border-radius: 8px;
   color: var(--brand-dark);
   background: rgba(255, 255, 255, 0.74);
-  font-size: 0.86rem;
-  font-weight: 900;
-  text-decoration: none;
   transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
 }
 
@@ -514,6 +506,40 @@ h3 {
   padding: 0;
   overflow: hidden;
   box-shadow: 0 22px 62px rgba(23, 32, 51, 0.09);
+}
+
+.policy-meta-card {
+  margin-bottom: 18px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18px 48px rgba(23, 32, 51, 0.07);
+}
+
+.policy-meta {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.22fr) minmax(0, 1fr);
+  gap: 10px 16px;
+  margin: 0;
+}
+
+.policy-meta dt,
+.policy-meta dd {
+  margin: 0;
+  line-height: 1.48;
+}
+
+.policy-meta dt {
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.policy-meta dd {
+  color: var(--muted);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
 }
 
 .policy-top h1 {
@@ -767,6 +793,11 @@ ul.clean-list {
 
   .policy-body {
     grid-template-columns: 1fr;
+  }
+
+  .policy-meta {
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 
   .policy-section,
