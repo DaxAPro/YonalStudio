@@ -244,6 +244,7 @@ function renderPolicyMeta(container, item) {
     if (!cleanValues.length) return;
     const itemNode = document.createElement('div');
     itemNode.className = 'policy-meta-item';
+    if (!isList) itemNode.classList.add('policy-meta-item-compact');
     const term = document.createElement('dt');
     const detail = document.createElement('dd');
     term.textContent = label;
