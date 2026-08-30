@@ -143,18 +143,21 @@ function isPublished(item) {
 
 function transitionPolicyLogo(image, targetUrl) {
   const nextUrl = safeAssetUrl(targetUrl, DEFAULT_LOGO);
-  if (nextUrl === DEFAULT_LOGO) return;
+  if (nextUrl === DEFAULT_LOGO) {
+    image.src = DEFAULT_LOGO;
+    image.classList.remove('is-loading');
+    return;
+  }
 
   const preload = new Image();
   preload.onload = () => {
-    image.classList.add('logo-switching');
-    setTimeout(() => {
-      image.src = nextUrl;
-      image.classList.remove('logo-placeholder');
-      requestAnimationFrame(() => image.classList.remove('logo-switching'));
-    }, 180);
+    image.src = nextUrl;
+    requestAnimationFrame(() => image.classList.remove('is-loading'));
   };
-  preload.onerror = () => handleImageError(image);
+  preload.onerror = () => {
+    image.src = DEFAULT_LOGO;
+    image.classList.remove('is-loading');
+  };
   preload.src = nextUrl;
 }
 
