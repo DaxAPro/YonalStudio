@@ -14,9 +14,7 @@ const FALLBACK_EXTENSIONS = [{
   iconUrl: 'https://res.cloudinary.com/ikag87ay/image/upload/v1787579124/Typlune_Local_Draft_Recovery_icon.png',
   features: 'Local draft snapshots|Recover lost text from web forms|Version history|Copy and restore drafts|Pause saving on specific websites|No analytics or ads',
   privacyEffectiveDate: '2026-08-24',
-  privacyPolicy: `Typlune - Local Draft Recovery Privacy Policy
-
-Overview
+  privacyPolicy: `Overview
 Typlune saves draft recovery data only on the user's device. It uses the data only for local draft recovery features.
 
 Data stored locally
@@ -159,8 +157,11 @@ function displayPolicy(item) {
   return text(item.privacyPolicy, 'Privacy policy content is not available for this extension yet. Email yonalsolutions@gmail.com for privacy questions.')
     .replace(/https?:\/\/\S+/g, '')
     .replace(/\s+or Telegram\s*/gi, ' ')
+    .replace(/^.*privacy policy\s*$/gim, '')
+    .replace(/^effective date:.*$/gim, '')
     .replace(/^published:\s*\w+\s*/gim, '')
-    .replace(/^C\.\s*Chrome Web Store Privacy Answers\s*/gim, 'Chrome Web Store Privacy Answers\n')
+    .replace(/^C\.\s*Chrome Web Store Privacy Answers[\s\S]*$/gim, '')
+    .replace(/^Chrome Web Store Privacy Answers[\s\S]*$/gim, '')
     .replace(/^\|.*\|$/gm, '')
     .replace(/^-{2,}$/gm, '')
     .replace(/[ \t]+\n/g, '\n')
