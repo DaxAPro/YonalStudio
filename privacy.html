@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
-<body>
+<body class="is-policy-loading">
   <div class="touch-layer" id="touchLayer" aria-hidden="true"></div>
   <main class="policy-shell">
     <a class="policy-back icon-button" href="extensions.html" aria-label="Back to extensions" title="Back to extensions">
@@ -45,6 +45,7 @@
       document.getElementById('policyDate').textContent = `Effective date: ${text(item.privacyEffectiveDate, '2026-08-16')}`;
       renderPolicyMeta(document.getElementById('policyMeta'), item);
       renderPolicyDocument(document.getElementById('policyBody'), displayPolicy(item));
+      requestAnimationFrame(() => document.body.classList.remove('is-policy-loading'));
     });
   </script>
 </body>

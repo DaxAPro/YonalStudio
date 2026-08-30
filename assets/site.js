@@ -335,6 +335,38 @@ function createExtensionCard(item) {
   return card;
 }
 
+function createExtensionSkeletonCard() {
+  const card = document.createElement('article');
+  card.className = 'extension-card skeleton-card';
+  card.setAttribute('aria-hidden', 'true');
+  card.innerHTML = `
+    <div class="extension-head">
+      <span class="skeleton-tile"></span>
+      <div class="skeleton-copy">
+        <span class="skeleton-line title"></span>
+        <span class="skeleton-line long"></span>
+        <span class="skeleton-line medium"></span>
+      </div>
+    </div>
+    <div class="actions">
+      <span class="button primary skeleton-line short"></span>
+      <span class="button skeleton-line short"></span>
+    </div>`;
+  return card;
+}
+
+function renderExtensionSkeletons(container, count = 2) {
+  container.textContent = '';
+  for (let index = 0; index < count; index += 1) {
+    container.appendChild(createExtensionSkeletonCard());
+  }
+}
+
+function revealDynamicContent(node, index = 0) {
+  node.style.animationDelay = `${Math.min(index * 70, 280)}ms`;
+  return node;
+}
+
 function selectedExtension(items) {
   const params = new URLSearchParams(window.location.search);
   const requested = cleanId(params.get('privacy') || params.get('id'));

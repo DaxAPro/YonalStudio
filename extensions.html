@@ -49,10 +49,15 @@
 
   <script src="assets/site.js"></script>
   <script>
+    const grid = document.getElementById('extensionGrid');
+    renderExtensionSkeletons(grid);
+
     loadExtensions().then((items) => {
-      const grid = document.getElementById('extensionGrid');
       grid.textContent = '';
-      items.forEach((item) => grid.appendChild(createExtensionCard(item)));
+      items.forEach((item, index) => grid.appendChild(revealDynamicContent(createExtensionCard(item), index)));
+      if (location.hash) {
+        requestAnimationFrame(() => document.querySelector(location.hash)?.scrollIntoView({ block: 'center' }));
+      }
     });
   </script>
 </body>
