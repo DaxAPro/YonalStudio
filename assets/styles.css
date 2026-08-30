@@ -457,7 +457,7 @@ h3 {
 }
 
 .policy-shell {
-  width: min(1240px, calc(100% - 44px));
+  width: min(980px, calc(100% - 44px));
   margin: 0 auto;
   padding: 34px 0 58px;
   min-height: 100vh;
@@ -509,8 +509,8 @@ h3 {
 }
 
 .policy-meta-card {
-  margin-bottom: 18px;
-  padding: 20px 22px;
+  margin-bottom: 20px;
+  padding: 18px 20px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.82);
@@ -519,8 +519,8 @@ h3 {
 
 .policy-meta {
   display: grid;
-  grid-template-columns: minmax(130px, 0.22fr) minmax(0, 1fr);
-  gap: 10px 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
   margin: 0;
 }
 
@@ -531,9 +531,11 @@ h3 {
 }
 
 .policy-meta dt {
+  margin-bottom: 5px;
   color: var(--text);
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   font-weight: 900;
+  text-transform: uppercase;
 }
 
 .policy-meta dd {
@@ -545,27 +547,36 @@ h3 {
 .policy-top h1 {
   max-width: 980px;
   margin-bottom: 8px;
-  font-size: clamp(2.6rem, 3.9rem, 4.7rem);
+  font-size: clamp(2.45rem, 5vw, 4.35rem);
   overflow-wrap: anywhere;
+}
+
+.policy-date {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 34px;
+  margin: 0;
+  padding: 0 13px;
+  border: 1px solid rgba(15, 142, 168, 0.2);
+  border-radius: 999px;
+  color: var(--brand-dark);
+  background: rgba(238, 248, 250, 0.86);
+  font-size: 0.88rem;
+  font-weight: 900;
 }
 
 .policy-body {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0;
 }
 
 .policy-section {
-  min-height: 152px;
-  padding: 26px 28px;
+  padding: 28px 30px;
   border-bottom: 1px solid rgba(217, 229, 234, 0.78);
 }
 
-.policy-section:nth-child(odd) {
-  border-right: 1px solid rgba(217, 229, 234, 0.78);
-}
-
-.policy-section:nth-last-child(-n + 2) {
+.policy-section:last-child {
   border-bottom: 0;
 }
 
@@ -764,32 +775,18 @@ ul.clean-list {
     justify-content: flex-start;
   }
 
-  .policy-body {
-    grid-template-columns: 1fr;
-  }
-
   .policy-meta {
     grid-template-columns: 1fr;
     gap: 4px;
   }
 
-  .policy-section,
-  .policy-section:nth-child(odd),
-  .policy-section:nth-last-child(-n + 2) {
-    min-height: 0;
-    border-right: 0;
-    border-bottom: 1px solid rgba(217, 229, 234, 0.78);
-  }
-
-  .policy-section:last-child {
-    border-bottom: 0;
-  }
+  .policy-section { padding: 24px 22px; }
 }
 
 @media (max-width: 520px) {
   .wrap,
   .policy-shell {
-    width: min(100% - 22px, 1240px);
+    width: min(100% - 22px, 980px);
   }
 
   .brand img {

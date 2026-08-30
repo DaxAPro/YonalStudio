@@ -162,6 +162,8 @@ function displayPolicy(item) {
     .replace(/^published:\s*\w+\s*/gim, '')
     .replace(/^C\.\s*Chrome Web Store Privacy Answers[\s\S]*$/gim, '')
     .replace(/^Chrome Web Store Privacy Answers[\s\S]*$/gim, '')
+    .replace(/^yonalsolutions@gmail\.com\s*\n?/gim, '')
+    .replace(/^For privacy questions.*yonalsolutions@gmail\.com\.?\s*$/gim, '')
     .replace(/^\|.*\|$/gm, '')
     .replace(/^-{2,}$/gm, '')
     .replace(/[ \t]+\n/g, '\n')
@@ -211,8 +213,6 @@ function renderPolicyMeta(container, item) {
   container.textContent = '';
   [
     ['Version', item.version],
-    ['Features', splitFeatures(item.features).join(', ')],
-    ['Privacy effective date', item.privacyEffectiveDate],
     ['Permissions', item.permissions],
     ['Data collected', item.dataCollected]
   ].forEach(([label, value]) => {
